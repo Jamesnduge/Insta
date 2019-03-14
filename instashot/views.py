@@ -18,6 +18,9 @@ def home(request):
     
     return render(request, 'index.html', {'images':images})
 
+def logout(request):
+    return redirect('login.html')
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -36,7 +39,7 @@ def signup(request):
             user.email_user(subject, message)
             return redirect('account_activation_sent')
     else:
-        form = SignUpForm()
+        form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
 def activate(request, uidb64, token):
     try:
@@ -65,7 +68,6 @@ def profile(request, username):
 
     return render(request, 'profile/profile.html', {'title':title, 'profile':profile, 'profile_details':profile_details, 'images':images})
 
-@login_required(login_url='/accounts/login')
 def upload_image(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -80,7 +82,7 @@ def upload_image(request):
     
     return render(request, 'profile/upload_image.html', {'form':form})
 
-@login_required(login_url='/accounts/login')
+
 def edit_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
@@ -94,7 +96,7 @@ def edit_profile(request):
 
     return render(request, 'profile/edit_profile.html', {'form':form})
 
-@login_required(login_url='/accounts/login')
+
 def single_image(request, image_id):
     image = Image.get_image_id(image_id)
     comments = Comments.get_comments_by_images(image_id)
