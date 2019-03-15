@@ -83,7 +83,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ranky.wsgi.application'
 LOGIN_REDIRECT_URL = '/home'
-# AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
 
 
 # Password validation

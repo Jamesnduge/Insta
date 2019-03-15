@@ -25,6 +25,7 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+            profile
             return render(request,'registration/login.html')
     else:
         form = SignupForm()
@@ -32,7 +33,6 @@ def signup(request):
     
 def profile(request, username):
     profile = User.objects.get(username=username)
-    # print(profile.id)
     try:
         profile_details = Profile.get_by_id(profile.id)
     except:
@@ -49,7 +49,6 @@ def upload_image(request):
         if form.is_valid():
             upload = form.save(commit=False)
             upload.profile = request.user
-            # print(f'image is {upload.image}')
             upload.save()
             return redirect('profile', username=request.user)
     else:
