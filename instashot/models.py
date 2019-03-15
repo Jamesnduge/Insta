@@ -4,7 +4,6 @@ from tinymce.models import HTMLField
 from pyuploadcare.dj.models import ImageField
 
 class Profile(models.Model):
-    # profile_photo = models.ImageField(upload_to = 'profilepics', default='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFz7wORupJV5ahkNunbltRjMPTcSfL2egrT2o3ASl4g6OO44pV')
     prof_pic = ImageField(blank=True, manual_crop='800x800')
     bio = HTMLField()
     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)

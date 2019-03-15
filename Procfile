@@ -1,1 +1,1 @@
-web: gunicorn ranky.wsgi
+web: gunicorn ranky.wsgi --log-file -

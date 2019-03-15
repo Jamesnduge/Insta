@@ -15,7 +15,7 @@
                 <div style=" border-radius: 1em;" class="section">
                     <h1 style="font-style: italic; color: black; text-shadow: 2px 2px lightgrey; " >Instashot</h1>
                     <div class="form-section">
-                        <form method="POST">
+                        <form action="/accounts/register/" method="POST">
                             {% csrf_token %}
                             {% bootstrap_form form %}
                             <div class="form-group">
