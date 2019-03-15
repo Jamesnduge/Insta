@@ -8,18 +8,15 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import SignupForm, ImageForm, ProfileForm, CommentForm
-from .emails import send_activation_email
-from .tokens import account_activation_token
 from .models import Image, Profile, Comments
 from django import forms
 
+@login_required(login_url='/')
 def home(request):
     images = Image.get_all_images()
     
     return render(request, 'index.html', {'images':images})
 
-def logout(request):
-    return redirect('login.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -28,33 +25,10 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            current_site = get_current_site(request)
-            subject = 'Activate Your MySite Account'
-            message = render_to_string('confirm.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect('account_activation_sent')
+            return render(request,'registration/login.html')
     else:
         form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        return HttpResponse('<h3>Thank you for confirming email. Now login to your account</h3>')
-    else:
-        return HttpResponse('Activation link is invalid')
     
 def profile(request, username):
     profile = User.objects.get(username=username)
@@ -68,6 +42,7 @@ def profile(request, username):
 
     return render(request, 'profile/profile.html', {'title':title, 'profile':profile, 'profile_details':profile_details, 'images':images})
 
+@login_required(login_url='/accounts/login')
 def upload_image(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -83,6 +58,7 @@ def upload_image(request):
     return render(request, 'profile/upload_image.html', {'form':form})
 
 
+@login_required(login_url='/accounts/login')
 def edit_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
@@ -97,6 +73,7 @@ def edit_profile(request):
     return render(request, 'profile/edit_profile.html', {'form':form})
 
 
+@login_required(login_url='/accounts/login')
 def single_image(request, image_id):
     image = Image.get_image_id(image_id)
     comments = Comments.get_comments_by_images(image_id)
