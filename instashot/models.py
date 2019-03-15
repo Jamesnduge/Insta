@@ -4,7 +4,7 @@ from tinymce.models import HTMLField
 from pyuploadcare.dj.models import ImageField
 
 class Profile(models.Model):
-    prof_pic = ImageField(blank=True, manual_crop='800x800')
+    prof_pic = ImageField(blank=True, manual_crop='')
     bio = HTMLField()
     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
 
@@ -27,7 +27,7 @@ class Profile(models.Model):
         return profile
 
 class Image(models.Model):
-    photo = ImageField(blank=True, manual_crop='800x800')
+    photo = ImageField(blank=True, manual_crop='')
     image_name = models.CharField(max_length = 50)
     image_caption = HTMLField(blank=True)
     post_date = models.DateTimeField(auto_now=True)

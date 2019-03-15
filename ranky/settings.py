@@ -34,6 +34,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 UPLOADCARE = {
     'pub_key': config('pub_key'),
     'secret': config('secret'),
+
 }
 
 # Application definition
